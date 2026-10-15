@@ -22,7 +22,7 @@ static int check_process_count(int rank, int size) {
     return 0;
 }
 
-static void report_root(const char *method, int rank, long long total) {
+static inline void report_root(const char *method, int rank, long long total) {
     if (rank != 0) return;
     const long long expected = expected_total();
     printf("\n[%s] Total = %lld\n", method, total);
@@ -37,4 +37,5 @@ static void report_max_time(const char *method, int rank, double elapsed) {
 }
 
 #endif
+
 

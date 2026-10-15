@@ -1,27 +1,44 @@
 MPICC ?= mpicc
-MPIEXEC ?= mpirun
+MPIEXEC ?= mpiexec
 PROCESSES ?= 4
 CFLAGS ?= -O2 -Wall -Wextra
 PROGRAMS = sum_bcast sum_scatter sum_gather sum_reduce sum_allreduce sum_scan
 
-.PHONY: all run clean
-all: $(PROGRAMS)
+ifeq ($(OS),Windows_NT)
+EXEEXT = .exe
+else
+EXEEXT =
+endif
+TARGETS = $(addsuffix $(EXEEXT),$(PROGRAMS))
 
-sum_bcast: Exercise01/sum_bcast.c sum_common.h
+.PHONY: all run clean
+all: $(TARGETS)
+
+sum_bcast$(EXEEXT): Exercise01/sum_bcast.c sum_common.h
 	$(MPICC) $(CFLAGS) -o $@ $<
-sum_scatter: Exercise02/sum_scatter.c sum_common.h
+sum_scatter$(EXEEXT): Exercise02/sum_scatter.c sum_common.h
 	$(MPICC) $(CFLAGS) -o $@ $<
-sum_gather: Exercise03/sum_gather.c sum_common.h
+sum_gather$(EXEEXT): Exercise03/sum_gather.c sum_common.h
 	$(MPICC) $(CFLAGS) -o $@ $<
-sum_reduce: Exercise04/sum_reduce.c sum_common.h
+sum_reduce$(EXEEXT): Exercise04/sum_reduce.c sum_common.h
 	$(MPICC) $(CFLAGS) -o $@ $<
-sum_allreduce: Exercise05/sum_allreduce.c sum_common.h
+sum_allreduce$(EXEEXT): Exercise05/sum_allreduce.c sum_common.h
 	$(MPICC) $(CFLAGS) -o $@ $<
-sum_scan: Exercise06/sum_scan.c sum_common.h
+sum_scan$(EXEEXT): Exercise06/sum_scan.c sum_common.h
 	$(MPICC) $(CFLAGS) -o $@ $<
 
 run: all
-	@set -e; for program in $(PROGRAMS); do echo "===== $$program ($(PROCESSES) processes) ====="; $(MPIEXEC) -np $(PROCESSES) ./$$program; done
+	$(MPIEXEC) -n $(PROCESSES) ./sum_bcast$(EXEEXT)
+	$(MPIEXEC) -n $(PROCESSES) ./sum_scatter$(EXEEXT)
+	$(MPIEXEC) -n $(PROCESSES) ./sum_gather$(EXEEXT)
+	$(MPIEXEC) -n $(PROCESSES) ./sum_reduce$(EXEEXT)
+	$(MPIEXEC) -n $(PROCESSES) ./sum_allreduce$(EXEEXT)
+	$(MPIEXEC) -n $(PROCESSES) ./sum_scan$(EXEEXT)
 
+ifeq ($(OS),Windows_NT)
 clean:
-	rm -f $(PROGRAMS)
+	del /q $(TARGETS)
+else
+clean:
+	rm -f $(TARGETS)
+endif
