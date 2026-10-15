@@ -1,0 +1,5 @@
+Exercise 5 solution: sum_allreduce.c
+
+MPI_Scatter distributes the input chunks, and MPI_Allreduce with MPI_SUM computes the global total on every rank. Each rank prints its local sum, the shared total, and its percentage contribution. Root also checks the result against 500000500000.
+
+Build and run with: mpicc -O2 -o sum_allreduce Exercise05/sum_allreduce.c && mpirun -np 4 ./sum_allreduce
