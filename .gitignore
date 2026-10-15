@@ -50,3 +50,11 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# MPI lab executables
+sum_bcast
+sum_scatter
+sum_gather
+sum_reduce
+sum_allreduce
+sum_scan
