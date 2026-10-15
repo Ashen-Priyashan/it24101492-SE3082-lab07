@@ -1,0 +1,5 @@
+Exercise 2 solution: sum_scatter.c
+
+MPI_Scatter distributes N / process_count integers to each rank. Only rank 0 allocates the full input array; every rank allocates one local chunk and sums that chunk. Partial sums are still collected with MPI_Send/MPI_Recv, and root adds them.
+
+Build and run with: mpicc -O2 -o sum_scatter Exercise02/sum_scatter.c && mpirun -np 4 ./sum_scatter
