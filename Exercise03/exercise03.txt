@@ -1,0 +1,5 @@
+Exercise 3 solution: sum_gather.c
+
+The program first uses MPI_Scatter to give each rank its chunk. MPI_Gather then collects one long long local sum from each rank into all_sums on root, in rank order. Root loops through all_sums to compute the total.
+
+Build and run with: mpicc -O2 -o sum_gather Exercise03/sum_gather.c && mpirun -np 4 ./sum_gather
