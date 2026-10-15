@@ -1,0 +1,5 @@
+Exercise 4 solution: sum_reduce.c
+
+Each rank receives its array chunk using MPI_Scatter and computes a local_sum. MPI_Reduce with MPI_SUM combines those values and stores total_sum only on rank 0. No manual summation loop is needed.
+
+Build and run with: mpicc -O2 -o sum_reduce Exercise04/sum_reduce.c && mpirun -np 4 ./sum_reduce
